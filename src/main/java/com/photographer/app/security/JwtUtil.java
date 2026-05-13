@@ -1,5 +1,6 @@
 package com.photographer.app.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,24 @@ public class JwtUtil {
                 .setExpiration(new Date(System.currentTimeMillis()+1000*60*60))
                 .signWith(SignatureAlgorithm.HS256,SECRET_KEY)
                 .compact();
+    }
+
+    public String extractEmail(String token){
+
+        Claims claims = Jwts.parser()
+                .setSigningKey(SECRET_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    // 🔥 NEW METHOD
+    public boolean validateToken(String token, String email){
+
+        String extractedEmail = extractEmail(token);
+
+        return extractedEmail.equals(email);
     }
 
 }
