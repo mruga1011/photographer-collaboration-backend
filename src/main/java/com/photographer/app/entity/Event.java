@@ -2,7 +2,8 @@ package com.photographer.app.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+
 
 @Entity
 @Table(name = "events")
@@ -15,9 +16,12 @@ public class Event {
 
     private String location;
 
-    private LocalDateTime eventDate;
+    private LocalDate eventDate;
 
     private Integer requiredPhotographers;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -43,11 +47,11 @@ public class Event {
         this.location = location;
     }
 
-    public LocalDateTime getEventDate() {
+    public LocalDate getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(LocalDateTime eventDate) {
+    public void setEventDate(LocalDate eventDate) {
         this.eventDate = eventDate;
     }
 

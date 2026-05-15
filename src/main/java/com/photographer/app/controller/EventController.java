@@ -2,6 +2,7 @@ package com.photographer.app.controller;
 
 import com.photographer.app.entity.Event;
 import com.photographer.app.repository.EventRepository;
+import com.photographer.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ public class EventController {
 
     @Autowired
     private EventRepository eventRepository;
+
 
     @PostMapping("/create")
     public Event creatEvent(@RequestBody Event event){
