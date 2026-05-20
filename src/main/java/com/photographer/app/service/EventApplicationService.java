@@ -8,6 +8,8 @@ import com.photographer.app.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EventApplicationService {
 
@@ -21,9 +23,35 @@ public class EventApplicationService {
 
         Event event = eventRepository.findById(eventId).orElseThrow(() -> new CustomException("Event not found"));
         eventApplication.setEvent(event);
+        eventApplication.setStatus("PENDING");
         return eventApplicationRepository.save(eventApplication);
+    }
 
+    public List<EventApplication> getApplicationByEvent(Long eventId){
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new CustomException("Event not found "));
+        return eventApplicationRepository.findByEventId(eventId);
+    }
 
+    public EventApplication updateStatus(
+            Long applicationId,
+            String status,
+            String email
+    ){
 
+        EventApplication application =
+                eventApplicationRepository.findById(applicationId)
+                        .orElseThrow(() ->
+                                new CustomException("Application not found"));
+
+        Event event = application.getEvent();
+
+        if(!event.getUser().getEmail().equals(email)){
+            throw new CustomException("You are not authorized");
+        }
+
+        application.setStatus(status);
+
+        return eventApplicationRepository.save(application);
     }
 }
