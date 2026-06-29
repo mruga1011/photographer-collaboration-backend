@@ -3,6 +3,7 @@ package com.photographer.app.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 
 @Entity
@@ -22,6 +23,11 @@ public class Event {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany(mappedBy = "event",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<EventApplication> applications;
 
     public Long getId() {
         return id;
@@ -69,5 +75,13 @@ public class Event {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<EventApplication> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(List<EventApplication> applications) {
+        this.applications = applications;
     }
 }
